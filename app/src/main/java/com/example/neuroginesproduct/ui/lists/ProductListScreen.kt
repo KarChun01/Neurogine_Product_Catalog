@@ -2,6 +2,7 @@ package com.example.neuroginesproduct.ui.lists
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,7 +29,10 @@ import androidx.compose.ui.res.stringResource
 data class Product(val title: String, val price: String)
 
 @Composable
-fun ProductListScreen(modifier: Modifier = Modifier) {
+fun ProductListScreen(
+    modifier: Modifier = Modifier,
+    onProductClick: (Product) -> Unit = {}
+) {
     var selectedTab by remember { mutableIntStateOf(0) }
 
     val productList = listOf(
@@ -133,7 +137,8 @@ fun ProductListScreen(modifier: Modifier = Modifier) {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .clickable { onProductClick(product) },
                     shape = RoundedCornerShape(16.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White),
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
