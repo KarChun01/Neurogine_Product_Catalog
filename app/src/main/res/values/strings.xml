@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">Neurogine’s Product</string>
+    <string name="app_name">Neurogine</string>
+    <string name="label_catelog">Catalog</string>
+    <string name="search_shadow">Search supplements, serums &amp; drops..</string>
+    <string name="back_to_catalog">Back to Catalog</string>
+    <string name="label_rating">Rating</string>
+    <string name="label_description">Description</string>
+    <string name="product_description">A premium, plant-based adaptation elixir designed to balance and revive stressed skin cells. Formulated with carefully selected clinical botanicals and neurotransmitter-friendly extracts to support native skin renewal.</string>
+    <string name="rating_text">4.8 (124 reviews)</string>
 </resources>
