@@ -23,7 +23,7 @@ class ProductListViewModel (private val repo: ProductRepo): ViewModel() {
         loadProducts()
     }
 
-    private fun loadProducts() {
+    fun loadProducts() {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
