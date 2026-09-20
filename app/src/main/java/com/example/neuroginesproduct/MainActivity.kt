@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import com.example.neuroginesproduct.data.remote.ApiInstance
 import com.example.neuroginesproduct.data.repo.ProductRepo
 import com.example.neuroginesproduct.ui.details.ProductDetailScreen
+import com.example.neuroginesproduct.ui.details.ProductDetailViewModel
 import com.example.neuroginesproduct.ui.lists.ProductListScreen
 import com.example.neuroginesproduct.ui.lists.ProductListViewModel
 import com.example.neuroginesproduct.ui.theme.NeuroginesProductTheme
@@ -20,17 +21,21 @@ class MainActivity : ComponentActivity() {
             NeuroginesProductTheme {
                 var currentScreen by remember { mutableStateOf("list") }
                 val repo = remember { ProductRepo(ApiInstance.api) }
-                val viewModel = remember { ProductListViewModel(repo) }
+                val listViewModel = remember { ProductListViewModel(repo) }
+                val detailViewModel = remember { ProductDetailViewModel(repo) }
+
 
                 if (currentScreen == "list") {
                     ProductListScreen(
-                        viewModel = viewModel,
-                        onProductClick = { _ ->
+                        viewModel = listViewModel,
+                        onProductClick = { product ->
+                            detailViewModel.loadProduct(product.id)
                             currentScreen = "detail"
                         }
                     )
                 } else {
                     ProductDetailScreen(
+                        viewModel = detailViewModel,
                         onBackClick = {
                             currentScreen = "list"
                         }
