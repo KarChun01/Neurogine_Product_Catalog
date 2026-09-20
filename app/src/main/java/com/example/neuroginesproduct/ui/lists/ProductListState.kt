@@ -7,5 +7,6 @@ data class ProductListState (
     val isLoading: Boolean = false,
     val isLoadingMore: Boolean = false,
     val error: String? = null,
-    val hasMore: Boolean = true
+    val hasMore: Boolean = true,
+    val searchQuery: String = ""
 )

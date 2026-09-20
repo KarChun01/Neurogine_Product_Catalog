@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Neurogine</string>
     <string name="label_catelog">Catalog</string>
-    <string name="search_shadow">Search supplements, serums &amp; drops..</string>
+    <string name="search_placeholder">Search supplements, serums &amp; drops..</string>
     <string name="back_to_catalog">Back to Catalog</string>
     <string name="label_rating">Rating</string>
     <string name="label_description">Description</string>

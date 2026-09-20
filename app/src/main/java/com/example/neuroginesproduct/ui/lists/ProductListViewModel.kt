@@ -3,6 +3,8 @@ package com.example.neuroginesproduct.ui.lists
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.neuroginesproduct.data.repo.ProductRepo
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +17,7 @@ class ProductListViewModel (private val repo: ProductRepo): ViewModel() {
     val uiState: StateFlow<ProductListState> = _uiState.asStateFlow()
     private val pageSize = 20
     private var skip = 0
+    private var searchJob: Job? = null
 
     init {
         loadProducts()
@@ -87,6 +90,57 @@ class ProductListViewModel (private val repo: ProductRepo): ViewModel() {
                     it.copy(
                         isLoadingMore = false,
                         error = e.message ?: "Failed to load more products"
+                    )
+                }
+            }
+        }
+    }
+
+    fun searchProducts(query: String) {
+        _uiState.update {
+            it.copy(searchQuery = query)
+        }
+
+        searchJob?.cancel()
+
+        searchJob = viewModelScope.launch {
+            delay(500)
+
+            if (query.isBlank()) {
+                skip = 0
+                loadProducts()
+                return@launch
+            }
+
+            _uiState.update {
+                it.copy(
+                    isLoading = true,
+                    error = null
+                )
+            }
+
+            try {
+                val response = repo.searchProducts(
+                    query = query,
+                    limit = pageSize,
+                    skip = 0
+                )
+
+                skip = response.products.size
+
+                _uiState.update {
+                    it.copy(
+                        products = response.products,
+                        isLoading = false,
+                        hasMore = response.products.size < response.total
+                    )
+                }
+
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = e.message ?: "Something went wrong"
                     )
                 }
             }
