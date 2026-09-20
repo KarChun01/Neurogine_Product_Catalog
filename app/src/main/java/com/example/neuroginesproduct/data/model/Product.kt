@@ -1,6 +1,6 @@
 package com.example.neuroginesproduct.data.model
 
-import java.sql.Date
+import java.util.Objects
 
 data class Product (
     val id: Int,
@@ -25,13 +25,13 @@ data class Product (
     val barcode: String,
     val qrCode: String,
     val reviews: List<Review>,
-    val meta: List<String>
+    val meta: Objects
 )
 
 data class Review (
     val rating: Int,
     val comment: String,
-    val date: Date,
+    val date: String,
     val reviewerName: String,
     val reviewerEmail: String,
 )

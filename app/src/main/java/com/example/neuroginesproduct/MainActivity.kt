@@ -5,8 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
+import com.example.neuroginesproduct.data.remote.ApiInstance
+import com.example.neuroginesproduct.data.repo.ProductRepo
 import com.example.neuroginesproduct.ui.details.ProductDetailScreen
 import com.example.neuroginesproduct.ui.lists.ProductListScreen
+import com.example.neuroginesproduct.ui.lists.ProductListViewModel
 import com.example.neuroginesproduct.ui.theme.NeuroginesProductTheme
 
 class MainActivity : ComponentActivity() {
@@ -16,9 +19,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             NeuroginesProductTheme {
                 var currentScreen by remember { mutableStateOf("list") }
+                val repo = remember { ProductRepo(ApiInstance.api) }
+                val viewModel = remember { ProductListViewModel(repo) }
 
                 if (currentScreen == "list") {
                     ProductListScreen(
+                        viewModel = viewModel,
                         onProductClick = { _ ->
                             currentScreen = "detail"
                         }
