@@ -141,7 +141,28 @@ fun ProductListScreen(
             }
 
             uiState.products.isEmpty() -> {
-                // TODO: Empty UI
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "No products found",
+                            style = MaterialTheme.typography.titleMedium
+                        )
+
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Text(
+                            text = "Try searching for something else.",
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+                    }
+                }
             }
 
             else -> {
