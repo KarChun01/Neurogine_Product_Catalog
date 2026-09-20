@@ -141,31 +141,6 @@ fun ProductListScreen(
                 }
             }
 
-            uiState.products.isEmpty() -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "No products found",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Text(
-                            text = "Try searching for something else.",
-                            color = MaterialTheme.colorScheme.secondary
-                        )
-                    }
-                }
-            }
-
             else -> {
                 LazyColumn(
                     modifier = Modifier
@@ -220,69 +195,98 @@ fun ProductListScreen(
                         Spacer(modifier = Modifier.height(20.dp))
                     }
 
-                    items(uiState.products) { product ->
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 8.dp)
-                                .clickable { onProductClick(product) },
-                            shape = RoundedCornerShape(16.dp),
-                            colors = CardDefaults.cardColors(containerColor = Color.White),
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
-                        ) {
-                            Row(
+                    if (uiState.products.isEmpty()) {
+                        item {
+                            Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(16.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                    .padding(horizontal = 16.dp, vertical = 48.dp),
+                                contentAlignment = Alignment.Center
                             ) {
-                                AsyncImage(
-                                    model = product.thumbnail,
-                                    contentDescription = product.title,
-                                    placeholder = painterResource(R.drawable.image_placeholder),
-                                    error = painterResource(R.drawable.image_placeholder),
-                                    modifier = Modifier.size(96.dp),
-                                    contentScale = ContentScale.Crop,
-                                    onError = {
-                                        Log.e(
-                                            "Thumbnail",
-                                            "Failed to load: : ${product.thumbnail}, error: ${it.result.throwable}"
-                                        )
-                                    },
-                                    onSuccess = {
-                                        Log.d(
-                                            "Thumbnail",
-                                            "Success: ${product.thumbnail}"
-                                        )
-                                    }
-                                )
-                                Spacer(modifier = Modifier.width(16.dp))
-                                Column {
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
                                     Text(
-                                        text = product.title,
-                                        fontSize = 18.sp,
-                                        fontWeight = FontWeight.Medium,
-                                        color = MaterialTheme.colorScheme.onBackground
+                                        text = "No products found",
+                                        style = MaterialTheme.typography.titleMedium
                                     )
+
                                     Spacer(modifier = Modifier.height(8.dp))
+
                                     Text(
-                                        text = "$${product.price}",
-                                        fontSize = 15.sp,
+                                        text = "Try searching for something else.",
                                         color = MaterialTheme.colorScheme.secondary
                                     )
                                 }
                             }
                         }
-                    }
-                    if (uiState.isLoadingMore) {
-                        item {
-                            Box(
+                    } else {
+
+                        items(uiState.products) { product ->
+                            Card(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(16.dp),
-                                contentAlignment = Alignment.Center
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                                    .clickable { onProductClick(product) },
+                                shape = RoundedCornerShape(16.dp),
+                                colors = CardDefaults.cardColors(containerColor = Color.White),
+                                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
                             ) {
-                                CircularProgressIndicator()
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    AsyncImage(
+                                        model = product.thumbnail,
+                                        contentDescription = product.title,
+                                        placeholder = painterResource(R.drawable.image_placeholder),
+                                        error = painterResource(R.drawable.image_placeholder),
+                                        modifier = Modifier.size(96.dp),
+                                        contentScale = ContentScale.Crop,
+                                        onError = {
+                                            Log.e(
+                                                "Thumbnail",
+                                                "Failed to load: : ${product.thumbnail}, error: ${it.result.throwable}"
+                                            )
+                                        },
+                                        onSuccess = {
+                                            Log.d(
+                                                "Thumbnail",
+                                                "Success: ${product.thumbnail}"
+                                            )
+                                        }
+                                    )
+                                    Spacer(modifier = Modifier.width(16.dp))
+                                    Column {
+                                        Text(
+                                            text = product.title,
+                                            fontSize = 18.sp,
+                                            fontWeight = FontWeight.Medium,
+                                            color = MaterialTheme.colorScheme.onBackground
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            text = "$${product.price}",
+                                            fontSize = 15.sp,
+                                            color = MaterialTheme.colorScheme.secondary
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        if (uiState.isLoadingMore) {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator()
+                                }
                             }
                         }
                     }
