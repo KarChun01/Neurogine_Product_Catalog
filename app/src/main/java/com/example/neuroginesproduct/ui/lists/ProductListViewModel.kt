@@ -70,10 +70,19 @@ class ProductListViewModel (private val repo: ProductRepo): ViewModel() {
             }
 
             try {
-                val response = repo.getProducts(
-                    limit = pageSize,
-                    skip = skip
-                )
+
+                val response = if (_uiState.value.searchQuery.isBlank()) {
+                    repo.getProducts(
+                        limit = pageSize,
+                        skip = skip
+                    )
+                } else {
+                    repo.searchProducts(
+                        query = _uiState.value.searchQuery,
+                        limit = pageSize,
+                        skip = skip
+                    )
+                }
 
                 skip += response.products.size
 
@@ -132,7 +141,7 @@ class ProductListViewModel (private val repo: ProductRepo): ViewModel() {
                     it.copy(
                         products = response.products,
                         isLoading = false,
-                        hasMore = response.products.size < response.total
+                        hasMore = skip  < response.total
                     )
                 }
 
